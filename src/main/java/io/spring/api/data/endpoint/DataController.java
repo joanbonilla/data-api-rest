@@ -13,13 +13,13 @@ import java.io.IOException;
 @RestController
 public class DataController {
 
-    @Autowired
-    private OpenDataService service;
+  @Autowired
+  private OpenDataService service;
 
-    @GetMapping("/data")
-    @ResponseBody
-    public Mono<DataResponse> data() throws IOException {
-        return Mono.just(service.getData());
-    }
+  @GetMapping("/data")
+  @ResponseBody
+  public Mono<DataResponse> data() throws IOException {
+    return service.getData();
+  }
 
 }

@@ -5,15 +5,18 @@ import io.spring.api.data.model.DataResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import reactor.core.publisher.Mono;
 
 @Service
 public class OpenDataService {
 
-    private static final String DATA_URI = "http://opendata-ajuntament.barcelona.cat/data/api/3/action/package_search";
+    @Value("${api.data.uri}")
+    private String  dataURI;
 
     private final Logger logger = LogManager.getLogger(OpenDataService.class);
 
@@ -22,15 +25,15 @@ public class OpenDataService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public DataResponse getData() throws IOException {
+    public Mono<DataResponse> getData() throws IOException {
 
         logger.info("Getting remote data {}.", System.currentTimeMillis());
 
         DataResponse response = objectMapper.readValue(
-                restTemplate.getForObject(DATA_URI, String.class),
+                restTemplate.getForObject(dataURI, String.class),
                 DataResponse.class);
 
-        return response;
+        return Mono.just(response);
     }
 
 }
